@@ -59,3 +59,6 @@ annotate, and reason about it.
 6. Render buildings, route, exposure cells, and annotations in deck.gl. Done.
 7. Add before/after comparison and experiment logging. Done.
 8. Add candidate-based privacy option generation for suggested route/camera alternatives. Done.
+的入口。
+
+研究人员可以设置：
