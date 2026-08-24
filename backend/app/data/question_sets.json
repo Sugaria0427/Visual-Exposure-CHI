@@ -1,0 +1,200 @@
+{
+  "version": "v1.0.0",
+  "factual_questions": [
+    {
+      "question_id": "A01",
+      "field_id": "A01",
+      "domain": "acquisition",
+      "prompt": "在此次飞行事件中，目标阳台的居民是否进入了无人机相机的有效视场（被相机拍摄到）？",
+      "options": ["是", "否", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "A02",
+      "field_id": "A02",
+      "domain": "acquisition",
+      "prompt": "在此次飞行事件中，哪个时间段有确凿证据支持目标阳台居民进入了有效视场？",
+      "options": ["无可支持入镜时段", "8.5-23.5s (或中段时段)", "0-10s", "20-30s", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "I01",
+      "field_id": "I01",
+      "domain": "task_capability",
+      "prompt": "根据本次任务的相机与算法配置，拍摄画面是否支持自动检测阳台区域‘是否有人’？",
+      "options": ["支持", "不支持", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "I02",
+      "field_id": "I02",
+      "domain": "task_capability",
+      "prompt": "根据本次任务配置，拍摄画面是否支持区分居民的粗粒度日常活动（如凭栏观景、看手机等）？",
+      "options": ["支持", "不支持", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "I03",
+      "field_id": "I03",
+      "domain": "task_capability",
+      "prompt": "本次飞行任务是否配置并执行了对居民的面部或个人身份识别？",
+      "options": ["支持", "不支持", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "D01",
+      "field_id": "D01",
+      "domain": "data_practice",
+      "prompt": "本次飞行采集的原始视频录像是否会被保存？",
+      "options": ["保存", "不保存", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "D02",
+      "field_id": "D02",
+      "domain": "data_practice",
+      "prompt": "本次拍摄的原始录像在哪里进行处理、查看或分析？",
+      "options": ["本地设备", "远程服务", "两者都有", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "D03",
+      "field_id": "D03",
+      "domain": "data_practice",
+      "prompt": "本次拍摄的原始视频录像在系统中预计会保存多久？",
+      "options": ["受限期限", "拓展期限", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "D04",
+      "field_id": "D04",
+      "domain": "data_practice",
+      "prompt": "本次采集的原始视频数据是否会被上传或提供给外部第三方接收者？",
+      "options": ["不上传", "上传至明示接收者", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "D05",
+      "field_id": "D05",
+      "domain": "data_practice",
+      "prompt": "谁有权限调阅或访问本次采集的原始录像？",
+      "options": ["仅责任角色", "包含外部运维", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "D06",
+      "field_id": "D06",
+      "domain": "data_practice",
+      "prompt": "本次采集的数据在任务完成后，是否存在巡检任务之外的其他二次用途（如商业展示或模型优化）？",
+      "options": ["无", "有", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "D07",
+      "field_id": "D07",
+      "domain": "data_practice",
+      "prompt": "系统是否明确承诺不会对画面中的居民生成任务外的额外推断（如生活习惯分析等）？",
+      "options": ["是", "否", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "R01",
+      "field_id": "R01",
+      "domain": "responsibility",
+      "prompt": "如果对本次飞行或数据处理有疑问，谁承担主要的解释与合规责任？",
+      "options": ["数据安全与合规主管", "巡逻勤务合规责任官", "无明确指定角色", "当前无法确认"],
+      "allow_unknown": true
+    },
+    {
+      "question_id": "U01",
+      "field_id": "U01",
+      "domain": "uncertainty",
+      "prompt": "在披露信息中，关于‘任务外额外推断’（D07）这一项，系统标注的证据状态是什么？",
+      "options": ["已由事件记录核对", "已由技术审计核对", "运行方业务声明", "当前无法确认", "现有来源冲突"],
+      "allow_unknown": true
+    }
+  ],
+  "protection_measures": {
+    "q1": {
+      "prompt": "仅根据目前提供的信息，你认为自己是否已有足够信息，对这次飞行作出隐私保护判断？",
+      "options": [
+        {"value": "1", "label": "有足够信息，我可以作出明确判断"},
+        {"value": "2", "label": "信息不完整，但我仍可作出暂定判断"},
+        {"value": "3", "label": "信息不足，我目前无法形成判断"}
+      ]
+    },
+    "q2": {
+      "prompt": "如果必须给出一个保护程度判断，你对当前飞行方式的担忧程度是？（请参考括号内的处理含义）",
+      "options": [
+        {"value": "1", "label": "1 - 无明显担忧（当前方式可直接继续）"},
+        {"value": "2", "label": "2 - 轻微担忧（可以继续，但应补充说明或小幅改进）"},
+        {"value": "3", "label": "3 - 中等担忧（必须增加具体隐私保护措施后才能继续）"},
+        {"value": "4", "label": "4 - 较强担忧（应暂停当前方式，重新规划后再评估）"},
+        {"value": "5", "label": "5 - 极强担忧（当前任务、拍摄和数据实践不应继续）"}
+      ]
+    }
+  },
+  "findability_tasks": [
+    {
+      "task_id": "F01",
+      "target_field_id": "A01_A02",
+      "instruction": "请在页面中找到：目标阳台居民是否入镜以及对应的有效时间段。"
+    },
+    {
+      "task_id": "F02",
+      "target_field_id": "I01_I03",
+      "instruction": "请在页面中找到：本次任务是否执行了‘个人身份识别’以及系统的能力边界。"
+    },
+    {
+      "task_id": "F03",
+      "target_field_id": "D02_D05",
+      "instruction": "请在页面中找到：原始录像在何处处理以及谁有权访问。"
+    },
+    {
+      "task_id": "F04",
+      "target_field_id": "D07",
+      "instruction": "请在页面中找到：哪一项数据实践处于‘当前无法确认’状态及其具体原因。"
+    },
+    {
+      "task_id": "F05",
+      "target_field_id": "R01_action",
+      "instruction": "请在页面中找到：解释责任主体角色，并定位一个可用的模拟行动入口。"
+    }
+  ],
+  "requested_conditions_catalog": [
+    {"id": "c_flight_path", "label": "调整飞行高度或航线，完全避开住宅阳台方向"},
+    {"id": "c_local_only", "label": "限定原始数据仅在机载本地处理，禁止上传云端"},
+    {"id": "c_short_retention", "label": "缩短保存期限（例如仅保留3天内自动擦除）"},
+    {"id": "c_restrict_access", "label": "严格限制数据访问者范围并提供调阅审计日志"},
+    {"id": "c_no_secondary_use", "label": "明确禁止任何任务外的商业展示或二次推断"},
+    {"id": "c_advance_notice", "label": "飞行前向受影响居民发送精准的提前通知"},
+    {"id": "c_easy_contact", "label": "提供明确的一键查询、更正或请求删除渠道"},
+    {"id": "c_none", "label": "当前运行方式已足够，无需特别增加条件"}
+  ],
+  "simulated_actions_catalog": [
+    {"id": "act_query_info", "label": "查询详细的责任主体与任务备案信息"},
+    {"id": "act_request_audit", "label": "请求提供该次飞行的数据流向与处理审计日志"},
+    {"id": "act_request_avoid", "label": "请求运行方在后续巡检中避开拍摄本阳台"},
+    {"id": "act_request_delete", "label": "请求调阅或删除包含本阳台的原始影像记录"},
+    {"id": "act_contact_dpo", "label": "联系数据安全与个人信息保护负责人提出关切"},
+    {"id": "act_no_action", "label": "暂不采取任何行动"},
+    {"id": "act_no_channel", "label": "认为当前没有可行且有效的应对渠道"}
+  ],
+  "burden_questions": [
+    {
+      "id": "B01",
+      "prompt": "在刚才的页面中，查找我关心的信息或事实是轻松且容易的。",
+      "options": ["1-非常不同意", "2-比较不同意", "3-中立", "4-比较同意", "5-非常同意"]
+    },
+    {
+      "id": "B02",
+      "prompt": "页面提供的信息量刚刚好，没有造成过多的认知负担。",
+      "options": ["1-非常不同意", "2-比较不同意", "3-中立", "4-比较同意", "5-非常同意"]
+    },
+    {
+      "id": "B03",
+      "prompt": "页面呈现的信息让我清楚理解了哪些事实是明确核验的，哪些是当前未知的。",
+      "options": ["1-非常不同意", "2-比较不同意", "3-中立", "4-比较同意", "5-非常同意"]
+    }
+  ]
+}

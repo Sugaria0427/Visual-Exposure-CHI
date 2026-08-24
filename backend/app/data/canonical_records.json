@@ -1,0 +1,571 @@
+{
+  "version": "v1.0.0",
+  "records": {
+    "A": {
+      "record_id": "A",
+      "profile_name": "L-E (低暴露 - 拓展数据实践)",
+      "visual_exposure": "low",
+      "operational_profile": "commercial_inspection",
+      "drone_appearance": {
+        "type": "unmarked_commercial",
+        "label": "普通无明显标记无人机",
+        "color": "纯白/灰色",
+        "has_police_marking": false,
+        "has_strobe_light": false
+      },
+      "flight_behavior": {
+        "speed": "慢速平移 (~2.5m/s)",
+        "gimbal_orientation": "镜头向外偏斜60度，光轴背离目标阳台",
+        "altitude_cue": "阳台居民略微抬头自然可见高度",
+        "distance_m": 14.0
+      },
+      "in_view_segments": [],
+      "task_boundaries": {
+        "I01_person_presence": {
+          "supported": false,
+          "evidence_state": "audited",
+          "note": "目标居民未进入相机有效视场，不支持检测有人"
+        },
+        "I02_activity_recognition": {
+          "supported": false,
+          "evidence_state": "audited",
+          "note": "目标居民未进入有效视场，不支持粗粒度活动判断"
+        },
+        "I03_identity_recognition": {
+          "supported": false,
+          "evidence_state": "audited",
+          "note": "本任务未配置且不支持面部或身份识别"
+        }
+      },
+      "data_practices": {
+        "D01": {
+          "field_id": "D01",
+          "label": "原始录像是否保存",
+          "value": "保存",
+          "evidence_state": "audited",
+          "source": "设备与任务运行配置",
+          "unknown_reason": null
+        },
+        "D02": {
+          "field_id": "D02",
+          "label": "处理地点",
+          "value": "远程服务",
+          "evidence_state": "audited",
+          "source": "云端处理流水线日志",
+          "unknown_reason": null
+        },
+        "D03": {
+          "field_id": "D03",
+          "label": "保存期限",
+          "value": "拓展期限 (保存3年)",
+          "evidence_state": "audited",
+          "source": "数据归档合规策略",
+          "unknown_reason": null
+        },
+        "D04": {
+          "field_id": "D04",
+          "label": "上传与接收者",
+          "value": "上传至明示接收者 (平台合作方与运维)",
+          "evidence_state": "audited",
+          "source": "数据传输审计日志",
+          "unknown_reason": null
+        },
+        "D05": {
+          "field_id": "D05",
+          "label": "访问权限角色",
+          "value": "项目组与明示接收者的运维人员",
+          "evidence_state": "audited",
+          "source": "IAM访问控制策略",
+          "unknown_reason": null
+        },
+        "D06": {
+          "field_id": "D06",
+          "label": "任务外额外用途",
+          "value": "存在任务外用途 (可能用于算法优化与展示案例)",
+          "evidence_state": "operator-declared",
+          "source": "运行方业务公开声明",
+          "unknown_reason": null
+        },
+        "D07": {
+          "field_id": "D07",
+          "label": "任务外额外推断",
+          "value": "当前无法确认",
+          "evidence_state": "unknown",
+          "source": "无公开审计记录",
+          "unknown_reason": "当前缺乏第三方对推理模型中间产物的独立审计，运行方未对二次推断做明确界定"
+        }
+      },
+      "responsibility": {
+        "R01": {
+          "operator_name": "城市低空数智巡检运营中心 (模拟)",
+          "responsible_role": "数据安全与合规主管",
+          "evidence_state": "verified",
+          "contact_channel": "研究情境模拟服务入口"
+        }
+      },
+      "active_safeguards": [
+        "传输通道TLS加密",
+        "审计日志只读留痕"
+      ],
+      "answer_keys": {
+        "pre": {
+          "A01": {"acceptable": ["当前无法确认", "否"], "unsupported_certainty": ["是"]},
+          "A02": {"acceptable": ["当前无法确认", "无可支持入镜时段"], "unsupported_certainty": ["0-10s", "10-20s", "20-30s"]},
+          "I01": {"acceptable": ["当前无法确认", "不支持"], "unsupported_certainty": ["支持"]},
+          "I02": {"acceptable": ["当前无法确认", "不支持"], "unsupported_certainty": ["支持"]},
+          "I03": {"acceptable": ["当前无法确认", "不支持"], "unsupported_certainty": ["支持"]},
+          "D01": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["保存", "不保存"]},
+          "D02": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["本地设备", "远程服务", "两者都有"]},
+          "D03": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["受限期限", "拓展期限"]},
+          "D04": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["不上传", "上传至明示接收者"]},
+          "D05": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["仅责任角色", "包含外部运维"]},
+          "D06": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["无", "有"]},
+          "D07": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["是", "否"]},
+          "R01": {"acceptable": ["当前无法确认", "数据安全与合规主管"]}
+        },
+        "post": {
+          "A01": {"acceptable": ["否"], "reference_value": "否", "reference_state": "audited"},
+          "A02": {"acceptable": ["无可支持入镜时段"], "reference_value": "无可支持入镜时段", "reference_state": "audited"},
+          "I01": {"acceptable": ["不支持"], "reference_value": "不支持", "reference_state": "audited"},
+          "I02": {"acceptable": ["不支持"], "reference_value": "不支持", "reference_state": "audited"},
+          "I03": {"acceptable": ["不支持"], "reference_value": "不支持", "reference_state": "audited"},
+          "D01": {"acceptable": ["保存"], "reference_value": "保存", "reference_state": "audited"},
+          "D02": {"acceptable": ["远程服务"], "reference_value": "远程服务", "reference_state": "audited"},
+          "D03": {"acceptable": ["拓展期限"], "reference_value": "拓展期限", "reference_state": "audited"},
+          "D04": {"acceptable": ["上传至明示接收者"], "reference_value": "上传至明示接收者", "reference_state": "audited"},
+          "D05": {"acceptable": ["包含外部运维"], "reference_value": "包含外部运维", "reference_state": "audited"},
+          "D06": {"acceptable": ["有"], "reference_value": "有", "reference_state": "operator-declared"},
+          "D07": {"acceptable": ["当前无法确认"], "reference_value": "当前无法确认", "reference_state": "unknown"},
+          "R01": {"acceptable": ["数据安全与合规主管"], "reference_value": "数据安全与合规主管", "reference_state": "verified"},
+          "U01": {"acceptable": ["当前无法确认"], "reference_value": "当前无法确认", "reference_state": "unknown"}
+        }
+      }
+    },
+    "B": {
+      "record_id": "B",
+      "profile_name": "L-R (低暴露 - 限制数据实践)",
+      "visual_exposure": "low",
+      "operational_profile": "police_patrol",
+      "drone_appearance": {
+        "type": "police_marked",
+        "label": "警用特征无人机",
+        "color": "黑白/蓝白条纹涂装或警灯",
+        "has_police_marking": true,
+        "has_strobe_light": true
+      },
+      "flight_behavior": {
+        "speed": "慢速平移 (~2.5m/s)",
+        "gimbal_orientation": "镜头向外偏斜60度，光轴背离目标阳台",
+        "altitude_cue": "阳台居民略微抬头自然可见高度",
+        "distance_m": 14.0
+      },
+      "in_view_segments": [],
+      "task_boundaries": {
+        "I01_person_presence": {
+          "supported": false,
+          "evidence_state": "audited",
+          "note": "目标居民未进入相机有效视场，不支持检测有人"
+        },
+        "I02_activity_recognition": {
+          "supported": false,
+          "evidence_state": "audited",
+          "note": "目标居民未进入有效视场，不支持粗粒度活动判断"
+        },
+        "I03_identity_recognition": {
+          "supported": false,
+          "evidence_state": "audited",
+          "note": "本任务未配置且不支持面部或身份识别"
+        }
+      },
+      "data_practices": {
+        "D01": {
+          "field_id": "D01",
+          "label": "原始录像是否保存",
+          "value": "保存",
+          "evidence_state": "audited",
+          "source": "巡逻执勤规程审计",
+          "unknown_reason": null
+        },
+        "D02": {
+          "field_id": "D02",
+          "label": "处理地点",
+          "value": "本地设备",
+          "evidence_state": "audited",
+          "source": "机载边缘处理单元审计",
+          "unknown_reason": null
+        },
+        "D03": {
+          "field_id": "D03",
+          "label": "保存期限",
+          "value": "受限期限 (仅保留7天)",
+          "evidence_state": "audited",
+          "source": "执勤数据自动擦除机制",
+          "unknown_reason": null
+        },
+        "D04": {
+          "field_id": "D04",
+          "label": "上传与接收者",
+          "value": "不上传 (仅本地加密暂存)",
+          "evidence_state": "audited",
+          "source": "网络隔离审计日志",
+          "unknown_reason": null
+        },
+        "D05": {
+          "field_id": "D05",
+          "label": "访问权限角色",
+          "value": "仅责任角色 (授权执勤人员)",
+          "evidence_state": "audited",
+          "source": "专机专人密匙访问审计",
+          "unknown_reason": null
+        },
+        "D06": {
+          "field_id": "D06",
+          "label": "任务外额外用途",
+          "value": "无 (严格禁止任务外二次使用)",
+          "evidence_state": "audited",
+          "source": "警务数据专有用途审计",
+          "unknown_reason": null
+        },
+        "D07": {
+          "field_id": "D07",
+          "label": "任务外额外推断",
+          "value": "当前无法确认",
+          "evidence_state": "unknown",
+          "source": "无公开审计记录",
+          "unknown_reason": "当前缺乏第三方对推理模型中间产物的独立审计，运行方未对二次推断做明确界定"
+        }
+      },
+      "responsibility": {
+        "R01": {
+          "operator_name": "社区网格化安防执勤中队 (模拟)",
+          "responsible_role": "巡逻勤务合规责任官",
+          "evidence_state": "verified",
+          "contact_channel": "研究情境模拟服务入口"
+        }
+      },
+      "active_safeguards": [
+        "机载硬件安全芯片加密",
+        "7天无警情自动物理覆写",
+        "物理隔离无外网传输"
+      ],
+      "answer_keys": {
+        "pre": {
+          "A01": {"acceptable": ["当前无法确认", "否"], "unsupported_certainty": ["是"]},
+          "A02": {"acceptable": ["当前无法确认", "无可支持入镜时段"], "unsupported_certainty": ["0-10s", "10-20s", "20-30s"]},
+          "I01": {"acceptable": ["当前无法确认", "不支持"], "unsupported_certainty": ["支持"]},
+          "I02": {"acceptable": ["当前无法确认", "不支持"], "unsupported_certainty": ["支持"]},
+          "I03": {"acceptable": ["当前无法确认", "不支持"], "unsupported_certainty": ["支持"]},
+          "D01": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["保存", "不保存"]},
+          "D02": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["本地设备", "远程服务", "两者都有"]},
+          "D03": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["受限期限", "拓展期限"]},
+          "D04": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["不上传", "上传至明示接收者"]},
+          "D05": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["仅责任角色", "包含外部运维"]},
+          "D06": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["无", "有"]},
+          "D07": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["是", "否"]},
+          "R01": {"acceptable": ["当前无法确认", "巡逻勤务合规责任官"]}
+        },
+        "post": {
+          "A01": {"acceptable": ["否"], "reference_value": "否", "reference_state": "audited"},
+          "A02": {"acceptable": ["无可支持入镜时段"], "reference_value": "无可支持入镜时段", "reference_state": "audited"},
+          "I01": {"acceptable": ["不支持"], "reference_value": "不支持", "reference_state": "audited"},
+          "I02": {"acceptable": ["不支持"], "reference_value": "不支持", "reference_state": "audited"},
+          "I03": {"acceptable": ["不支持"], "reference_value": "不支持", "reference_state": "audited"},
+          "D01": {"acceptable": ["保存"], "reference_value": "保存", "reference_state": "audited"},
+          "D02": {"acceptable": ["本地设备"], "reference_value": "本地设备", "reference_state": "audited"},
+          "D03": {"acceptable": ["受限期限"], "reference_value": "受限期限", "reference_state": "audited"},
+          "D04": {"acceptable": ["不上传"], "reference_value": "不上传", "reference_state": "audited"},
+          "D05": {"acceptable": ["仅责任角色"], "reference_value": "仅责任角色", "reference_state": "audited"},
+          "D06": {"acceptable": ["无"], "reference_value": "无", "reference_state": "audited"},
+          "D07": {"acceptable": ["当前无法确认"], "reference_value": "当前无法确认", "reference_state": "unknown"},
+          "R01": {"acceptable": ["巡逻勤务合规责任官"], "reference_value": "巡逻勤务合规责任官", "reference_state": "verified"},
+          "U01": {"acceptable": ["当前无法确认"], "reference_value": "当前无法确认", "reference_state": "unknown"}
+        }
+      }
+    },
+    "C": {
+      "record_id": "C",
+      "profile_name": "H-E (高暴露 - 拓展数据实践)",
+      "visual_exposure": "high",
+      "operational_profile": "commercial_inspection",
+      "drone_appearance": {
+        "type": "unmarked_commercial",
+        "label": "普通无明显标记无人机",
+        "color": "纯白/灰色",
+        "has_police_marking": false,
+        "has_strobe_light": false
+      },
+      "flight_behavior": {
+        "speed": "远距中高速掠过 (~7.0m/s)",
+        "gimbal_orientation": "云台俯仰与偏航自适应追踪并锁定阳台",
+        "altitude_cue": "阳台居民略微抬头自然可见高度",
+        "distance_m": 38.0
+      },
+      "in_view_segments": [
+        {"start_s": 8.5, "end_s": 23.5, "target_state": "in_view", "confidence": "high"}
+      ],
+      "task_boundaries": {
+        "I01_person_presence": {
+          "supported": true,
+          "evidence_state": "audited",
+          "note": "目标在8.5-23.5s处于视场中心，支持检测有人"
+        },
+        "I02_activity_recognition": {
+          "supported": true,
+          "evidence_state": "audited",
+          "note": "分辨率支持判断凭栏观景等粗粒度活动轮廓"
+        },
+        "I03_identity_recognition": {
+          "supported": false,
+          "evidence_state": "audited",
+          "note": "远距离像素密度不足，且系统未配置面部识别算法"
+        }
+      },
+      "data_practices": {
+        "D01": {
+          "field_id": "D01",
+          "label": "原始录像是否保存",
+          "value": "保存",
+          "evidence_state": "audited",
+          "source": "设备与任务运行配置",
+          "unknown_reason": null
+        },
+        "D02": {
+          "field_id": "D02",
+          "label": "处理地点",
+          "value": "远程服务",
+          "evidence_state": "audited",
+          "source": "云端处理流水线日志",
+          "unknown_reason": null
+        },
+        "D03": {
+          "field_id": "D03",
+          "label": "保存期限",
+          "value": "拓展期限 (保存3年)",
+          "evidence_state": "audited",
+          "source": "数据归档合规策略",
+          "unknown_reason": null
+        },
+        "D04": {
+          "field_id": "D04",
+          "label": "上传与接收者",
+          "value": "上传至明示接收者 (平台合作方与运维)",
+          "evidence_state": "audited",
+          "source": "数据传输审计日志",
+          "unknown_reason": null
+        },
+        "D05": {
+          "field_id": "D05",
+          "label": "访问权限角色",
+          "value": "项目组与明示接收者的运维人员",
+          "evidence_state": "audited",
+          "source": "IAM访问控制策略",
+          "unknown_reason": null
+        },
+        "D06": {
+          "field_id": "D06",
+          "label": "任务外额外用途",
+          "value": "存在任务外用途 (可能用于算法优化与展示案例)",
+          "evidence_state": "operator-declared",
+          "source": "运行方业务公开声明",
+          "unknown_reason": null
+        },
+        "D07": {
+          "field_id": "D07",
+          "label": "任务外额外推断",
+          "value": "当前无法确认",
+          "evidence_state": "unknown",
+          "source": "无公开审计记录",
+          "unknown_reason": "当前缺乏第三方对推理模型中间产物的独立审计，运行方未对二次推断做明确界定"
+        }
+      },
+      "responsibility": {
+        "R01": {
+          "operator_name": "城市低空数智巡检运营中心 (模拟)",
+          "responsible_role": "数据安全与合规主管",
+          "evidence_state": "verified",
+          "contact_channel": "研究情境模拟服务入口"
+        }
+      },
+      "active_safeguards": [
+        "传输通道TLS加密",
+        "审计日志只读留痕"
+      ],
+      "answer_keys": {
+        "pre": {
+          "A01": {"acceptable": ["当前无法确认", "是"], "unsupported_certainty": ["否"]},
+          "A02": {"acceptable": ["当前无法确认", "8.5-23.5s (或中段时段)"], "unsupported_certainty": ["无可支持入镜时段"]},
+          "I01": {"acceptable": ["当前无法确认", "支持"], "unsupported_certainty": ["不支持"]},
+          "I02": {"acceptable": ["当前无法确认", "支持"], "unsupported_certainty": ["不支持"]},
+          "I03": {"acceptable": ["当前无法确认", "不支持"], "unsupported_certainty": ["支持"]},
+          "D01": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["保存", "不保存"]},
+          "D02": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["本地设备", "远程服务", "两者都有"]},
+          "D03": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["受限期限", "拓展期限"]},
+          "D04": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["不上传", "上传至明示接收者"]},
+          "D05": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["仅责任角色", "包含外部运维"]},
+          "D06": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["无", "有"]},
+          "D07": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["是", "否"]},
+          "R01": {"acceptable": ["当前无法确认", "数据安全与合规主管"]}
+        },
+        "post": {
+          "A01": {"acceptable": ["是"], "reference_value": "是", "reference_state": "audited"},
+          "A02": {"acceptable": ["8.5-23.5s (或中段时段)"], "reference_value": "8.5-23.5s", "reference_state": "audited"},
+          "I01": {"acceptable": ["支持"], "reference_value": "支持", "reference_state": "audited"},
+          "I02": {"acceptable": ["支持"], "reference_value": "支持", "reference_state": "audited"},
+          "I03": {"acceptable": ["不支持"], "reference_value": "不支持", "reference_state": "audited"},
+          "D01": {"acceptable": ["保存"], "reference_value": "保存", "reference_state": "audited"},
+          "D02": {"acceptable": ["远程服务"], "reference_value": "远程服务", "reference_state": "audited"},
+          "D03": {"acceptable": ["拓展期限"], "reference_value": "拓展期限", "reference_state": "audited"},
+          "D04": {"acceptable": ["上传至明示接收者"], "reference_value": "上传至明示接收者", "reference_state": "audited"},
+          "D05": {"acceptable": ["包含外部运维"], "reference_value": "包含外部运维", "reference_state": "audited"},
+          "D06": {"acceptable": ["有"], "reference_value": "有", "reference_state": "operator-declared"},
+          "D07": {"acceptable": ["当前无法确认"], "reference_value": "当前无法确认", "reference_state": "unknown"},
+          "R01": {"acceptable": ["数据安全与合规主管"], "reference_value": "数据安全与合规主管", "reference_state": "verified"},
+          "U01": {"acceptable": ["当前无法确认"], "reference_value": "当前无法确认", "reference_state": "unknown"}
+        }
+      }
+    },
+    "D": {
+      "record_id": "D",
+      "profile_name": "H-R (高暴露 - 限制数据实践)",
+      "visual_exposure": "high",
+      "operational_profile": "police_patrol",
+      "drone_appearance": {
+        "type": "police_marked",
+        "label": "警用特征无人机",
+        "color": "黑白/蓝白条纹涂装或警灯",
+        "has_police_marking": true,
+        "has_strobe_light": true
+      },
+      "flight_behavior": {
+        "speed": "远距中高速掠过 (~7.0m/s)",
+        "gimbal_orientation": "云台俯仰与偏航自适应追踪并锁定阳台",
+        "altitude_cue": "阳台居民略微抬头自然可见高度",
+        "distance_m": 38.0
+      },
+      "in_view_segments": [
+        {"start_s": 8.5, "end_s": 23.5, "target_state": "in_view", "confidence": "high"}
+      ],
+      "task_boundaries": {
+        "I01_person_presence": {
+          "supported": true,
+          "evidence_state": "audited",
+          "note": "目标在8.5-23.5s处于视场中心，支持检测有人"
+        },
+        "I02_activity_recognition": {
+          "supported": true,
+          "evidence_state": "audited",
+          "note": "分辨率支持判断凭栏观景等粗粒度活动轮廓"
+        },
+        "I03_identity_recognition": {
+          "supported": false,
+          "evidence_state": "audited",
+          "note": "远距离像素密度不足，且系统未配置面部识别算法"
+        }
+      },
+      "data_practices": {
+        "D01": {
+          "field_id": "D01",
+          "label": "原始录像是否保存",
+          "value": "保存",
+          "evidence_state": "audited",
+          "source": "巡逻执勤规程审计",
+          "unknown_reason": null
+        },
+        "D02": {
+          "field_id": "D02",
+          "label": "处理地点",
+          "value": "本地设备",
+          "evidence_state": "audited",
+          "source": "机载边缘处理单元审计",
+          "unknown_reason": null
+        },
+        "D03": {
+          "field_id": "D03",
+          "label": "保存期限",
+          "value": "受限期限 (仅保留7天)",
+          "evidence_state": "audited",
+          "source": "执勤数据自动擦除机制",
+          "unknown_reason": null
+        },
+        "D04": {
+          "field_id": "D04",
+          "label": "上传与接收者",
+          "value": "不上传 (仅本地加密暂存)",
+          "evidence_state": "audited",
+          "source": "网络隔离审计日志",
+          "unknown_reason": null
+        },
+        "D05": {
+          "field_id": "D05",
+          "label": "访问权限角色",
+          "value": "仅责任角色 (授权执勤人员)",
+          "evidence_state": "audited",
+          "source": "专机专人密匙访问审计",
+          "unknown_reason": null
+        },
+        "D06": {
+          "field_id": "D06",
+          "label": "任务外额外用途",
+          "value": "无 (严格禁止任务外二次使用)",
+          "evidence_state": "audited",
+          "source": "警务数据专有用途审计",
+          "unknown_reason": null
+        },
+        "D07": {
+          "field_id": "D07",
+          "label": "任务外额外推断",
+          "value": "当前无法确认",
+          "evidence_state": "unknown",
+          "source": "无公开审计记录",
+          "unknown_reason": "当前缺乏第三方对推理模型中间产物的独立审计，运行方未对二次推断做明确界定"
+        }
+      },
+      "responsibility": {
+        "R01": {
+          "operator_name": "社区网格化安防执勤中队 (模拟)",
+          "responsible_role": "巡逻勤务合规责任官",
+          "evidence_state": "verified",
+          "contact_channel": "研究情境模拟服务入口"
+        }
+      },
+      "active_safeguards": [
+        "机载硬件安全芯片加密",
+        "7天无警情自动物理覆写",
+        "物理隔离无外网传输"
+      ],
+      "answer_keys": {
+        "pre": {
+          "A01": {"acceptable": ["当前无法确认", "是"], "unsupported_certainty": ["否"]},
+          "A02": {"acceptable": ["当前无法确认", "8.5-23.5s (或中段时段)"], "unsupported_certainty": ["无可支持入镜时段"]},
+          "I01": {"acceptable": ["当前无法确认", "支持"], "unsupported_certainty": ["不支持"]},
+          "I02": {"acceptable": ["当前无法确认", "支持"], "unsupported_certainty": ["不支持"]},
+          "I03": {"acceptable": ["当前无法确认", "不支持"], "unsupported_certainty": ["支持"]},
+          "D01": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["保存", "不保存"]},
+          "D02": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["本地设备", "远程服务", "两者都有"]},
+          "D03": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["受限期限", "拓展期限"]},
+          "D04": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["不上传", "上传至明示接收者"]},
+          "D05": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["仅责任角色", "包含外部运维"]},
+          "D06": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["无", "有"]},
+          "D07": {"acceptable": ["当前无法确认"], "unsupported_certainty": ["是", "否"]},
+          "R01": {"acceptable": ["当前无法确认", "巡逻勤务合规责任官"]}
+        },
+        "post": {
+          "A01": {"acceptable": ["是"], "reference_value": "是", "reference_state": "audited"},
+          "A02": {"acceptable": ["8.5-23.5s (或中段时段)"], "reference_value": "8.5-23.5s", "reference_state": "audited"},
+          "I01": {"acceptable": ["支持"], "reference_value": "支持", "reference_state": "audited"},
+          "I02": {"acceptable": ["支持"], "reference_value": "支持", "reference_state": "audited"},
+          "I03": {"acceptable": ["不支持"], "reference_value": "不支持", "reference_state": "audited"},
+          "D01": {"acceptable": ["保存"], "reference_value": "保存", "reference_state": "audited"},
+          "D02": {"acceptable": ["本地设备"], "reference_value": "本地设备", "reference_state": "audited"},
+          "D03": {"acceptable": ["受限期限"], "reference_value": "受限期限", "reference_state": "audited"},
+          "D04": {"acceptable": ["不上传"], "reference_value": "不上传", "reference_state": "audited"},
+          "D05": {"acceptable": ["仅责任角色"], "reference_value": "仅责任角色", "reference_state": "audited"},
+          "D06": {"acceptable": ["无"], "reference_value": "无", "reference_state": "audited"},
+          "D07": {"acceptable": ["当前无法确认"], "reference_value": "当前无法确认", "reference_state": "unknown"},
+          "R01": {"acceptable": ["巡逻勤务合规责任官"], "reference_value": "巡逻勤务合规责任官", "reference_state": "verified"},
+          "U01": {"acceptable": ["当前无法确认"], "reference_value": "当前无法确认", "reference_state": "unknown"}
+        }
+      }
+    }
+  }
+}

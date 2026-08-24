@@ -1,4 +1,4 @@
-import type { CameraConfig, ExposureSummary, RoutePoint, StudyCondition, StudyLanguage, StudyRole, StudyStepId } from './types';
+import type { CameraConfig, ExposureSummary, RoutePoint, StudyCondition, StudyLanguage, StudyRole, LegacyStudyStepId as StudyStepId } from './types';
 
 export type StudyLogEvent = {
   timestamp: string;

@@ -60,7 +60,7 @@ import type {
   StudyCondition,
   StudyLanguage,
   StudyRole,
-  StudyStepId,
+  LegacyStudyStepId as StudyStepId,
 } from './types';
 import type { FeatureCollection } from './utils/geojson';
 import { WARMUP_RESULT_STORAGE_KEY } from './warmupStorage';
@@ -2721,8 +2721,8 @@ function buildAffectedBuildingCollection(
   return {
     type: 'FeatureCollection',
     features: scenario.buildings.features
-      .filter((feature) => exposedBuildingIds.has(String(feature.properties.building_id ?? '')))
-      .map((feature) => ({
+      .filter((feature: any) => exposedBuildingIds.has(String(feature.properties.building_id ?? '')))
+      .map((feature: any) => ({
         ...feature,
         properties: {
           ...feature.properties,
@@ -2741,8 +2741,8 @@ function buildAffectedSemanticCollection(
   return {
     type: 'FeatureCollection',
     features: scenario.semantic_layers.features
-      .filter((feature) => exposedSemanticIds.has(String(feature.properties.surface_id ?? '')))
-      .map((feature) => ({
+      .filter((feature: any) => exposedSemanticIds.has(String(feature.properties.surface_id ?? '')))
+      .map((feature: any) => ({
         ...feature,
         properties: {
           ...feature.properties,
@@ -2767,7 +2767,7 @@ function buildPoseHitCollections(
   // interaction responsive while the numeric count still reports every
   // visible first-hit surface at that position.
   const hitSurfaceIds = new Set(pose.top_surface_ids);
-  const hitSurfaces = exposure.exposure_surfaces.features.filter((feature) =>
+  const hitSurfaces = exposure.exposure_surfaces.features.filter((feature: any) =>
     hitSurfaceIds.has(String(feature.properties.surface_id ?? '')),
   );
   const buildingIds = new Set<string>();
@@ -2785,17 +2785,17 @@ function buildPoseHitCollections(
     surfaces: { type: 'FeatureCollection', features: hitSurfaces },
     buildings: {
       type: 'FeatureCollection',
-      features: scenario.buildings.features.filter((feature) =>
+      features: scenario.buildings.features.filter((feature: any) =>
         buildingIds.has(String(feature.properties.building_id ?? '')),
       ),
     },
     semanticAreas: {
       type: 'FeatureCollection',
-      features: scenario.semantic_layers.features.filter((feature) =>
+      features: scenario.semantic_layers.features.filter((feature: any) =>
         semanticIds.has(String(feature.properties.surface_id ?? '')),
       ),
     },
-    points: exposure.exposure_points.filter((point) => hitSurfaceIds.has(point.surface_id)),
+    points: exposure.exposure_points.filter((point: any) => hitSurfaceIds.has(point.surface_id)),
   };
 }
 

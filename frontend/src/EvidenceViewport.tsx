@@ -50,7 +50,7 @@ export function EvidenceViewport({
 
   const topSurfaces = pose.top_surface_ids
     .map((surfaceId) => exposure.exposure_surfaces.features.find(
-      (feature) => feature.properties.surface_id === surfaceId,
+      (feature: any) => feature.properties.surface_id === surfaceId,
     ))
     .filter(Boolean)
     .slice(0, 3);

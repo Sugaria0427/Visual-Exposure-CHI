@@ -1,100 +1,159 @@
-import { compareResponseSchema, exposureResponseSchema, planningResponseSchema, scenarioSchema } from './schemas';
-import type { CameraConfig, CompareResponse, ExposureResponse, PlanningResponse, RoutePoint, Scenario, UserPreferences } from './types';
+import type {
+  CompareResponse,
+  ExposureResponse,
+  MaterialsPayload,
+  PlanningResponse,
+  RoutePoint,
+  Scenario,
+  StudySessionInfo,
+  StudyStepId,
+  UserPreferences,
+} from './types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:8011' : '');
-const STATIC_SCENARIO_BASE = '/scenarios';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
 
-const STATIC_CAMERA_PROFILES = [
-  {
-    id: 'wide_survey',
-    label: 'Wide Survey',
-    description: 'Wider context view for public notice and broad situational awareness.',
-    camera: {
-      hfov_deg: 92,
-      vfov_deg: 58,
-      gimbal_pitch_deg: -42,
-      ray_width: 72,
-      ray_height: 40,
-      min_depth_m: 0,
-      max_depth_m: 220,
+async function requestJson<T>(url: string, options?: RequestInit): Promise<T> {
+  const fullUrl = `${API_BASE_URL}${url}`;
+  const res = await fetch(fullUrl, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options?.headers ?? {}),
     },
-  },
-  {
-    id: 'inspection_balanced',
-    label: 'Balanced Inspection',
-    description: 'Default study camera balancing coverage, detail, and interactive speed.',
-    camera: {
-      hfov_deg: 78,
-      vfov_deg: 50,
-      gimbal_pitch_deg: -45,
-      ray_width: 80,
-      ray_height: 45,
-      min_depth_m: 0,
-      max_depth_m: 250,
-    },
-  },
-  {
-    id: 'focused_detail',
-    label: 'Focused Detail',
-    description: 'Narrower detail view for closer inspection with a shorter effective depth.',
-    camera: {
-      hfov_deg: 56,
-      vfov_deg: 36,
-      gimbal_pitch_deg: -50,
-      ray_width: 120,
-      ray_height: 68,
-      min_depth_m: 5,
-      max_depth_m: 140,
-    },
-  },
-];
+    ...options,
+  });
 
-async function fetchJson(url: string, init?: RequestInit): Promise<unknown> {
-  const response = await fetch(url, init);
-  if (!response.ok) {
-    throw new Error(`Request failed with ${response.status}: ${response.statusText}`);
+  if (!res.ok) {
+    const errorText = await res.text();
+    let detail = errorText;
+    try {
+      const parsed = JSON.parse(errorText);
+      detail = parsed.detail || errorText;
+    } catch {
+      // ignore
+    }
+    throw new Error(detail || `HTTP error ${res.status}`);
   }
-  return response.json();
+
+  return res.json() as Promise<T>;
 }
+
+// ==========================================
+// Formal CHI-3 Study API
+// ==========================================
+
+export async function launchStudy(launchToken: string): Promise<StudySessionInfo> {
+  return requestJson<StudySessionInfo>('/api/study/launch', {
+    method: 'POST',
+    body: JSON.stringify({
+      launch_token: launchToken,
+      environment: 'prod',
+      material_mode: 'validated',
+    }),
+  });
+}
+
+export async function getSessionStatus(sessionId: string): Promise<StudySessionInfo> {
+  return requestJson<StudySessionInfo>(`/api/study/session/${sessionId}`);
+}
+
+export async function confirmStart(sessionId: string): Promise<{ status: string; current_step: StudyStepId }> {
+  return requestJson<{ status: string; current_step: StudyStepId }>(`/api/study/confirm-start?session_id=${sessionId}`, {
+    method: 'POST',
+  });
+}
+
+export async function getMaterials(sessionId: string, phase: 'pre' | 'post'): Promise<MaterialsPayload> {
+  return requestJson<MaterialsPayload>(`/api/study/materials/${sessionId}?phase=${phase}`);
+}
+
+export async function submitResponse(payload: {
+  session_id: string;
+  phase: 'pre' | 'post';
+  question_id: string;
+  field_id?: string;
+  response_value?: string;
+  confidence?: number;
+  q2_asked?: number;
+  skip_reason?: string;
+  response_time_ms?: number;
+  reason_codes?: string[];
+  requested_conditions?: string[];
+  simulated_action?: string;
+  action_feasibility?: number;
+}): Promise<{ status: string; evaluation: any }> {
+  return requestJson<{ status: string; evaluation: any }>('/api/study/response', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function submitBatchEvents(sessionId: string, events: Array<{
+  event_seq: number;
+  event_type: string;
+  phase: string;
+  payload?: any;
+  client_timestamp?: string;
+}>): Promise<{ status: string; count: number }> {
+  return requestJson<{ status: string; count: number }>('/api/study/events', {
+    method: 'POST',
+    body: JSON.stringify({
+      session_id: sessionId,
+      events,
+    }),
+  });
+}
+
+export async function advanceState(sessionId: string, nextStep: StudyStepId): Promise<{ status: string; current_step: StudyStepId }> {
+  return requestJson<{ status: string; current_step: StudyStepId }>('/api/study/state', {
+    method: 'POST',
+    body: JSON.stringify({
+      session_id: sessionId,
+      next_step: nextStep,
+    }),
+  });
+}
+
+export async function completeStudy(sessionId: string): Promise<{ session_id: string; completion_code: string; completed_at: string }> {
+  return requestJson<{ session_id: string; completion_code: string; completed_at: string }>('/api/study/complete', {
+    method: 'POST',
+    body: JSON.stringify({ session_id: sessionId }),
+  });
+}
+
+export async function verifyCompletionCode(code: string): Promise<{
+  valid: boolean;
+  status: string;
+  session_id?: string;
+  cell_id?: string;
+  issued_at?: string;
+  verified_at?: string;
+}> {
+  return requestJson('/api/study/verify-code', {
+    method: 'POST',
+    body: JSON.stringify({ completion_code: code }),
+  });
+}
+
+export async function fetchParityCheck(): Promise<{ overall_status: string; details: any[] }> {
+  return requestJson('/api/admin/parity-check');
+}
+
+// ==========================================
+// Legacy API for Sandbox/Demo Isolation
+// ==========================================
 
 export async function loadScenario(scenarioId = 'hong_kong_mong_kok_01'): Promise<Scenario> {
-  try {
-    const data = await fetchJson(`${API_BASE_URL}/api/scenarios/${scenarioId}`);
-    return scenarioSchema.parse(data) as Scenario;
-  } catch (reason) {
-    if (scenarioId !== 'hong_kong_mong_kok_01') {
-      throw reason;
-    }
-    return loadStaticScenario(scenarioId);
-  }
-}
-
-async function loadStaticScenario(scenarioId: string): Promise<Scenario> {
-  const base = `${STATIC_SCENARIO_BASE}/${scenarioId}`;
-  const [scenario, buildings, semanticLayers] = await Promise.all([
-    fetchJson(`${base}/scenario.json`),
-    fetchJson(`${base}/osm_buildings.geojson`),
-    fetchJson(`${base}/osm_semantic_areas.geojson`),
-  ]);
-  return scenarioSchema.parse({
-    ...(scenario as Record<string, unknown>),
-    buildings,
-    semantic_layers: semanticLayers,
-    camera_profiles: STATIC_CAMERA_PROFILES,
-    default_camera_profile_id: 'inspection_balanced',
-    camera: STATIC_CAMERA_PROFILES[1].camera,
-  }) as Scenario;
+  return requestJson<Scenario>(`/api/scenarios/${scenarioId}`);
 }
 
 export async function computeExposure(
   scenarioId: string,
   route: RoutePoint[],
-  camera: CameraConfig,
-  userPreferences: UserPreferences = { acceptable_conditions: [] },
+  camera: any,
+  userPreferences?: any,
 ): Promise<ExposureResponse> {
-  const data = await fetchJson(`${API_BASE_URL}/api/exposure/compute`, {
+  return requestJson<ExposureResponse>('/api/exposure/compute', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       scenario_id: scenarioId,
       route,
@@ -102,57 +161,39 @@ export async function computeExposure(
       user_preferences: userPreferences,
     }),
   });
-  return exposureResponseSchema.parse(data) as ExposureResponse;
 }
 
 export async function compareExposure(
   scenarioId: string,
   route: RoutePoint[],
-  camera: CameraConfig,
-  userPreferences: UserPreferences,
+  camera: any,
+  userPreferences?: any,
 ): Promise<CompareResponse> {
-  const before = {
-    scenario_id: scenarioId,
-    route,
-    camera,
-    user_preferences: { acceptable_conditions: [] },
-  };
-  const after = {
-    scenario_id: scenarioId,
-    route,
-    camera,
-    user_preferences: userPreferences,
-  };
-  const data = await fetchJson(`${API_BASE_URL}/api/exposure/compare`, {
+  return requestJson<CompareResponse>('/api/exposure/compare', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ scenario_id: scenarioId, before, after }),
+    body: JSON.stringify({
+      scenario_id: scenarioId,
+      before: { scenario_id: scenarioId, route, camera, user_preferences: {} },
+      after: { scenario_id: scenarioId, route, camera, user_preferences: userPreferences },
+    }),
   });
-  return compareResponseSchema.parse(data) as CompareResponse;
 }
 
 export async function optimizePlanning(
   scenarioId: string,
   route: RoutePoint[],
-  camera: CameraConfig,
-  userPreferences: UserPreferences,
+  camera: any,
+  userPreferences?: any,
+  plannerConfig?: any,
 ): Promise<PlanningResponse> {
-  const data = await fetchJson(`${API_BASE_URL}/api/planning/optimize`, {
+  return requestJson<PlanningResponse>('/api/planning/optimize', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       scenario_id: scenarioId,
       route,
       camera,
       user_preferences: userPreferences,
-      planner_config: {
-        max_options: 3,
-        max_candidates: 8,
-        evaluation_ray_width: 32,
-        evaluation_ray_height: 18,
-        influence_radius_m: 120,
-      },
+      planner_config: plannerConfig,
     }),
   });
-  return planningResponseSchema.parse(data) as PlanningResponse;
 }
